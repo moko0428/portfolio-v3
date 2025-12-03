@@ -1,65 +1,97 @@
-import Image from "next/image";
-
+import { INTRO, STUDIES } from '@/data/data';
+import { About } from '@/components/about';
+import { ProjectsSection } from '@/components/projects';
+import { ActivitiesSection } from '@/components/activities';
+import { HeroActions } from '@/components/hero-actions';
+import { ScrollHint } from '@/components/scroll-hint';
+import { ScrollReset } from '@/components/scroll-reset';
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-background text-foreground">
+      <ScrollReset />
+      <div className="mx-auto flex max-w-5xl flex-col px-4 md:px-6 lg:px-8">
+        {/* Intro hero: 한 화면 꽉 채우기 */}
+        <section className="flex min-h-screen flex-col items-center justify-center gap-8 pb-16">
+          <div className="flex items-center justify-center rounded-full bg-primary/10 px-4 py-1">
+            <span className="text-xs font-medium text-primary">
+              {INTRO.englishName} · {INTRO.title}
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-2">
+            <span className="text-4xl font-semibold tracking-tight">
+              가나다라마바사아자
+            </span>
+            <span className="text-3xl font-semibold tracking-tight text-primary">
+              가나다라마바사
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center text-center gap-2">
+            <span className="text-base leading-relaxed text-muted-foreground">
+              저는 사용자 경험을 최우선으로 생각하며, 깔끔하고 효율적인 코드로
+              아름다운 웹 애플리케이션을 구현하는 프론트엔드 개발자입니다.
+            </span>
+            <div className="flex items-center justify-center py-20">
+              <HeroActions />
+            </div>
+            <ScrollHint />
+          </div>
+        </section>
+
+        {/* 아래부터는 스크롤 내려야 보이도록 */}
+        <div className="flex flex-col items-center gap-24 pb-20">
+          {/* About Me */}
+          <About />
+
+          {/* Activities & History */}
+          <ActivitiesSection />
+
+          {/* Projects */}
+          <ProjectsSection />
+
+          {/* Study */}
+          <section id="study" className="w-full space-y-6">
+            <div className="flex items-center justify-center">
+              <h2 className="mb-8 border-b-2 border-primary pb-1 text-2xl font-semibold tracking-tight">
+                Studies
+              </h2>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              {STUDIES.map((study) => (
+                <div
+                  key={study.title}
+                  className="rounded-xl border bg-card/60 p-4 text-sm shadow-sm"
+                >
+                  <h3 className="text-sm font-semibold">{study.title}</h3>
+                  {'period' in study && (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {study.period}
+                    </p>
+                  )}
+                  <div className="mt-2 space-y-1.5 text-sm leading-relaxed text-muted-foreground">
+                    {Array.isArray(study.description) ? (
+                      study.description.map((line: string) => (
+                        <p key={line}>{line}</p>
+                      ))
+                    ) : (
+                      <p>{study.description}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="mt-4 w-full border-t pt-6 text-xs text-muted-foreground">
+            <div className="flex flex-col items-start justify-between gap-2 md:flex-row md:items-center">
+              <span>
+                © {new Date().getFullYear()} Junyoung Lee. All rights reserved.
+              </span>
+            </div>
+          </footer>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

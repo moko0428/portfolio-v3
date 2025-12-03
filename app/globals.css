@@ -1,26 +1,151 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* Mind Matcha inspired – 밝은 아이보리 배경과 차분한 그린 팔레트 */
+  --radius: 0.75rem;
+
+  --background: #fdfbf6;
+  --foreground: #333333;
+
+  --card: #ffffff;
+  --card-foreground: #333333;
+
+  --popover: #ffffff;
+  --popover-foreground: #333333;
+
+  /* 메인 그린 & 서브 틸 */
+  --primary: #4caf50;
+  --primary-foreground: #fdfbf6;
+
+  --secondary: #e4f0e8;
+  --secondary-foreground: #2f4635;
+
+  --muted: #f3f4f1;
+  --muted-foreground: #667085;
+
+  --accent: #3b6f72;
+  --accent-foreground: #fdfbf6;
+
+  --destructive: #d24343;
+
+  --border: #e0e4dc;
+  --input: #e0e4dc;
+  --ring: #6cae7a;
+
+  /* 차트 / 사이드바는 메인 팔레트에서 파생 */
+  --chart-1: #4caf50;
+  --chart-2: #3b6f72;
+  --chart-3: #8fbf88;
+  --chart-4: #f0c27b;
+  --chart-5: #e27d60;
+
+  --sidebar: #f7faf7;
+  --sidebar-foreground: #2f3b33;
+  --sidebar-primary: #4caf50;
+  --sidebar-primary-foreground: #fdfbf6;
+  --sidebar-accent: #e4f0e8;
+  --sidebar-accent-foreground: #2f4635;
+  --sidebar-border: #dde3d7;
+  --sidebar-ring: #6cae7a;
+}
+
+.dark {
+  /* 어두운 테마 – 녹차색 톤 다운 */
+  --background: #101713;
+  --foreground: #f5f7f3;
+
+  --card: #151d18;
+  --card-foreground: #f5f7f3;
+
+  --popover: #151d18;
+  --popover-foreground: #f5f7f3;
+
+  --primary: #7ccf86;
+  --primary-foreground: #0b120e;
+
+  --secondary: #1e2922;
+  --secondary-foreground: #f5f7f3;
+
+  --muted: #1e2922;
+  --muted-foreground: #9fb2a3;
+
+  --accent: #3b6f72;
+  --accent-foreground: #f5f7f3;
+
+  --destructive: #f97070;
+
+  --border: rgba(245, 247, 243, 0.08);
+  --input: rgba(245, 247, 243, 0.12);
+  --ring: #7ccf86;
+
+  --chart-1: #7ccf86;
+  --chart-2: #3b6f72;
+  --chart-3: #f0c27b;
+  --chart-4: #e27d60;
+  --chart-5: #c38d9e;
+
+  --sidebar: #111815;
+  --sidebar-foreground: #f5f7f3;
+  --sidebar-primary: #7ccf86;
+  --sidebar-primary-foreground: #0b120e;
+  --sidebar-accent: #1e2922;
+  --sidebar-accent-foreground: #f5f7f3;
+  --sidebar-border: rgba(245, 247, 243, 0.08);
+  --sidebar-ring: #7ccf86;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+html {
+  scroll-behavior: smooth;
 }
