@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import Image from 'next/image';
 
 import { motion, type Variants } from 'motion/react';
 
@@ -18,12 +19,9 @@ const itemVariants: Variants = {
 export function ProjectsSection() {
   const [selected, setSelected] = useState<Project | null>(null);
   const [page, setPage] = useState(1);
-  const [markdown, setMarkdown] = useState<string | null>(null);
-  const [isLoadingMd, setIsLoadingMd] = useState(false);
-  const [mdError, setMdError] = useState<string | null>(null);
 
   const getPeriodScore = (period: string) => {
-    // 우선 "YYYY.MM" 패턴을 찾고, 없으면 연도만 사용
+    // "YYYY.MM" 패턴을 우선 사용하고, 없으면 연도만 사용
     const ym = period.match(/(\d{4})\.(\d{2})/);
     if (ym) {
       const year = Number(ym[1]);
@@ -39,7 +37,7 @@ export function ProjectsSection() {
         return year * 12;
       }
     }
-    // "기간 미정" 같은 값은 가장 뒤로 가도록 0 처리
+    // 형식이 애매한 경우(예: "기간 미정")는 가장 오래된 것으로 간주
     return 0;
   };
 
@@ -52,49 +50,7 @@ export function ProjectsSection() {
   const start = (page - 1) * pageSize;
   const currentProjects = sortedProjects.slice(start, start + pageSize);
 
-  const close = () => {
-    setSelected(null);
-    setMarkdown(null);
-    setMdError(null);
-  };
-
-  useEffect(() => {
-    if (!selected?.slug) {
-      setMarkdown(null);
-      setMdError(null);
-      return;
-    }
-
-    let cancelled = false;
-    const fetchMarkdown = async () => {
-      try {
-        setIsLoadingMd(true);
-        setMdError(null);
-        const res = await fetch(`/api/projects/${selected.slug}`);
-        if (!res.ok) {
-          throw new Error('Failed to load markdown');
-        }
-        const data = (await res.json()) as { content?: string };
-        if (!cancelled) {
-          setMarkdown(data.content ?? null);
-        }
-      } catch {
-        if (!cancelled) {
-          setMdError('프로젝트 상세 내용을 불러오지 못했습니다.');
-        }
-      } finally {
-        if (!cancelled) {
-          setIsLoadingMd(false);
-        }
-      }
-    };
-
-    fetchMarkdown();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [selected?.slug]);
+  const close = () => setSelected(null);
 
   return (
     <section id="projects" className="w-full space-y-6">
@@ -121,35 +77,49 @@ export function ProjectsSection() {
               whileInView="show"
               viewport={{ once: true, amount: 0.3 }}
               onClick={() => setSelected(project)}
-              className="group flex h-full flex-col rounded-xl border bg-card/60 p-5 text-left text-sm shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:border-primary/25 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+              className="group flex h-full flex-col overflow-hidden rounded-xl border bg-card/60 text-left text-sm shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:border-primary/25 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
             >
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h3 className="text-base font-semibold">{project.name}</h3>
-                <span className="text-xs text-muted-foreground">
-                  {project.period}
-                </span>
-              </div>
-              <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
-                {project.description}
-              </p>
-              {techList.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {techList.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+              {project.coverImage && (
+                <div className="relative h-40 w-full overflow-hidden border-b border-border/60 bg-muted">
+                  <Image
+                    src={project.coverImage}
+                    alt={project.name}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                    sizes="(min-width: 768px) 256px, 100vw"
+                  />
                 </div>
               )}
-              <span className="mt-4 inline-flex items-center text-xs font-medium text-primary">
-                자세히 보기
-                <span className="ml-1 transition-transform group-hover:translate-x-0.5">
-                  →
+
+              <div className="flex flex-1 flex-col p-5">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 className="text-base font-semibold">{project.name}</h3>
+                  <span className="text-xs text-muted-foreground">
+                    {project.period}
+                  </span>
+                </div>
+                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+                  {project.description}
+                </p>
+                {techList.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {techList.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <span className="mt-4 inline-flex items-center text-xs font-medium text-primary">
+                  자세히 보기
+                  <span className="ml-1 transition-transform group-hover:translate-x-0.5">
+                    →
+                  </span>
                 </span>
-              </span>
+              </div>
             </motion.button>
           );
         })}
@@ -270,6 +240,20 @@ export function ProjectsSection() {
               </div>
             )}
 
+            {selected.troubleshooting &&
+              selected.troubleshooting.length > 0 && (
+                <div className="mt-4 space-y-1.5 text-sm">
+                  <h4 className="text-xs font-semibold text-primary">
+                    트러블 슈팅
+                  </h4>
+                  <ul className="list-disc space-y-1 pl-4 text-xs text-muted-foreground">
+                    {selected.troubleshooting.map((t) => (
+                      <li key={t}>{t}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
             {selected.links && selected.links.length > 0 && (
               <div className="mt-4 space-y-2">
                 <h4 className="text-xs font-semibold text-primary">링크</h4>
@@ -289,18 +273,22 @@ export function ProjectsSection() {
               </div>
             )}
 
-            {/* Markdown content from /data/*.md */}
-            {isLoadingMd && (
-              <p className="mt-4 text-[11px] text-muted-foreground">
-                상세 내용을 불러오는 중입니다...
-              </p>
-            )}
-            {mdError && (
-              <p className="mt-4 text-[11px] text-destructive">{mdError}</p>
-            )}
-            {markdown && (
-              <div className="mt-5 rounded-lg bg-muted/40 p-3 text-xs leading-relaxed whitespace-pre-wrap">
-                {markdown}
+            {selected.video && (
+              <div className="mt-6 space-y-2">
+                <h4 className="text-xs font-semibold text-primary">
+                  시연 영상
+                </h4>
+                <div className="relative w-full overflow-hidden rounded-lg border bg-black/5">
+                  <div className="relative aspect-video w-full">
+                    <Image
+                      src={selected.video}
+                      alt={`${selected.name} 시연 영상`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 600px"
+                    />
+                  </div>
+                </div>
               </div>
             )}
           </motion.div>

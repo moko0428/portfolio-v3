@@ -18,18 +18,15 @@ export default function Home() {
             </span>
           </div>
           <div className="flex flex-col items-center justify-center gap-2">
-            <span className="text-4xl font-semibold tracking-tight">
-              가나다라마바사아자
+            <span className="text-4xl font-semibold tracking-tight text-center">
+              번뜩이는 아이디어 현실적인 기획 실행력 있는 개발
             </span>
             <span className="text-3xl font-semibold tracking-tight text-primary">
-              가나다라마바사
+              {'"AI를 곁들인"'}
             </span>
           </div>
           <div className="flex flex-col items-center justify-center text-center gap-2">
-            <span className="text-base leading-relaxed text-muted-foreground">
-              저는 사용자 경험을 최우선으로 생각하며, 깔끔하고 효율적인 코드로
-              아름다운 웹 애플리케이션을 구현하는 프론트엔드 개발자입니다.
-            </span>
+            <span className="text-base leading-relaxed text-muted-foreground"></span>
             <div className="flex items-center justify-center py-20">
               <HeroActions />
             </div>
