@@ -279,15 +279,15 @@ export function ProjectsSection() {
                   시연 영상
                 </h4>
                 <div className="relative w-full overflow-hidden rounded-lg border bg-black/5">
-                  <div className="relative aspect-video w-full">
-                    <Image
-                      src={selected.video}
-                      alt={`${selected.name} 시연 영상`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 600px"
-                    />
-                  </div>
+                  <Image
+                    src={selected.video}
+                    alt={`${selected.name} 시연 영상`}
+                    width={640}
+                    height={1180}
+                    className="h-auto w-full object-contain"
+                    sizes="(max-width: 768px) 100vw, 600px"
+                    unoptimized
+                  />
                 </div>
               </div>
             )}
